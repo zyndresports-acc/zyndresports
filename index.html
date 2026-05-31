@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZYNDER ESPORTS | Rocket League Competitive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0A0A1A',
+                        card: '#121225',
+                        neonCyan: '#00F0FF',
+                        neonBlue: '#0088FF',
+                        neonPurple: '#7000FF',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glow-cyan { filter: drop-shadow(0 0 10px #00F0FF); }
+            .glow-blue { filter: drop-shadow(0 0 10px #0088FF); }
+            .glow-purple { filter: drop-shadow(0 0 10px #7000FF); }
+            .gradient-btn { background: linear-gradient(90deg, #00F0FF, #0088FF); }
+            .gradient-text { background: linear-gradient(90deg, #00F0FF, #0088FF); background-clip: text; -webkit-background-clip: text; color: transparent; }
+            .border-glow { border: 1px solid rgba(0, 240, 255, 0.4); box-shadow: 0 0 12px rgba(0, 240, 255, 0.2); }
+            .page-section { display: none; }
+            .page-section.active { display: block; }
+            .btn-hover { transition: all 0.3s ease; }
+            .btn-hover:hover { transform: scale(1.03); }
+        }
+    </style>
+    <!-- Protection -->
+    <script>
+    document.oncontextmenu = () => false;
+    document.onkeydown = e => {
+        if((e.ctrlKey || e.metaKey) && [65,83,85,73,123].includes(e.keyCode)) return false;
+        if(e.keyCode === 123 || e.keyCode === 116) return false;
+    };
+    </script>
+</head>
+<body class="bg-dark text-white font-sans min-h-screen">
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+        <div class="bg-card p-8 rounded-lg w-full max-w-md border-glow">
+            <h2 class="text-2xl font-bold mb-6 text-center gradient-text glow-cyan">ADMIN LOGIN</h2>
+            <input type="text" id="loginEmail" value="zyndresports@gmail.com" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30" readonly>
+            <input type="password" id="loginPass" placeholder="Password" class="w-full p-3 mb-6 rounded bg-dark border border-neonCyan/30" value="Mader18!">
+            <button id="doLogin" class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">UNLOCK DASHBOARD</button>
+        </div>
+    </div>
+
+    <!-- SIGNUP MODAL -->
+    <div id="signupModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+        <div class="bg-card p-8 rounded-lg w-full max-w-md border-glow max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center gradient-text glow-blue">JOIN THE ROSTER</h2>
+            <input type="text" placeholder="Full Name / Gamertag" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+            <input type="text" placeholder="Discord Tag" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+            <input type="text" placeholder="Epic / RL ID" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+            <input type="text" placeholder="Current Rank / Division" class="w-full p-3 mb-6 rounded bg-dark border border-neonBlue/30">
+            <button class="gradient-btn w-full py-3 rounded-md font-bold btn-hover mb-4">CREATE ACCOUNT</button>
+            <p class="text-center text-sm text-gray-400">Already have account? <a href="#" class="text-neonCyan" onclick="toggleModal('loginModal')">Sign in</a></p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="fixed top-0 right-0 h-full w-80 bg-card border-l border-neonCyan/40 z-40 p-6 hidden overflow-y-auto shadow-2xl shadow-neonCyan/10">
+        <h2 class="text-xl font-bold mb-8 text-center gradient-text glow-cyan">⚙️ ZYNDER COMMAND CENTER</h2>
+
+        <div class="mb-6 p-3 bg-dark rounded border border-neonCyan/20">
+            <h3 class="font-bold text-neonCyan mb-2">DISCORD SETTINGS</h3>
+            <input type="text" id="discordLinkInput" placeholder="Discord Invite URL" class="w-full p-2 mb-2 rounded bg-card" value="https://discord.gg/zyndr">
+            <button id="saveDiscord" class="w-full gradient-btn py-2 rounded text-sm font-bold btn-hover">💾 SAVE — UPDATES EVERYWHERE</button>
+        </div>
+
+        <div class="mb-6 p-3 bg-dark rounded border border-neonCyan/20">
+            <h3 class="font-bold text-neonCyan mb-2">LIVE STATS</h3>
+            <input type="text" id="statPlayers" class="w-full p-2 mb-1 rounded bg-card" value="18">
+            <input type="text" id="statTournaments" class="w-full p-2 mb-1 rounded bg-card" value="12">
+            <input type="text" id="statCoaching" class="w-full p-2 mb-1 rounded bg-card" value="42">
+            <input type="text" id="statMembers" class="w-full p-2 mb-2 rounded bg-card" value="147">
+            <button id="saveStats" class="w-full gradient-btn py-2 rounded text-sm font-bold btn-hover">💾 UPDATE STATS</button>
+        </div>
+
+        <div class="space-y-2 text-sm">
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">👤 MANAGE USERS</button>
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">🚗 EDIT ROSTER</button>
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">📅 CALENDAR</button>
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">🎬 APPROVE CLIPS</button>
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">📨 COACHING REQUESTS</button>
+            <button class="w-full text-left p-2 rounded hover:bg-neonCyan/10">✉️ INBOX MESSAGES</button>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full top-0 z-30 bg-dark/80 backdrop-blur-md border-b border-neonCyan/20">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text glow-cyan">ZYNDER ESPORTS</div>
+            <div class="hidden md:flex gap-6 text-sm">
+                <a href="#" onclick="showPage('home')" class="hover:text-neonCyan transition">HOME</a>
+                <a href="#" onclick="showPage('about')" class="hover:text-neonCyan transition">ABOUT</a>
+                <a href="#" onclick="showPage('clips')" class="hover:text-neonCyan transition">CLIPS</a>
+                <a href="#" onclick="showPage('events')" class="hover:text-neonCyan transition">EVENTS</a>
+                <a href="#" onclick="showPage('coaching')" class="hover:text-neonCyan transition">COACHING</a>
+                <a href="#" onclick="showPage('contact')" class="hover:text-neonCyan transition">CONTACT</a>
+                <a id="navDiscord" href="https://discord.gg/zyndr" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord text-lg"></i></a>
+            </div>
+            <button id="loginBtn" onclick="toggleModal('loginModal')" class="gradient-btn px-5 py-2 rounded-md font-bold btn-hover">LOGIN</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="pt-24 pb-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+
+            <!-- HOME PAGE -->
+            <section id="home" class="page-section active">
+                <div class="text-center mb-16">
+                    <h1 class="text-[clamp(2.6rem,6vw,5rem)] font-bold gradient-text glow-cyan mb-4">DOMINATE THE FIELD.<br>MASTER THE AERIALS.</h1>
+                    <p class="text-lg text-gray-300 max-w-2xl mx-auto">Building the most technical, strategic, and competitive Rocket League roster. Precision mechanics. Team chemistry. Championship mindset.</p>
+                </div>
+
+                <!-- STATS -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <div id="numPlayers" class="text-3xl font-bold text-neonCyan glow-cyan">18</div>
+                        <div class="text-gray-400 text-sm">Active Players</div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <div id="numTournaments" class="text-3xl font-bold text-neonCyan glow-cyan">12</div>
+                        <div class="text-gray-400 text-sm">Tournaments Won</div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <div id="numCoaching" class="text-3xl font-bold text-neonCyan glow-cyan">42</div>
+                        <div class="text-gray-400 text-sm">Coaching Sessions</div>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <div id="numMembers" class="text-3xl font-bold text-neonCyan glow-cyan">147</div>
+                        <div class="text-gray-400 text-sm">Community Members</div>
+                    </div>
+                </div>
+
+                <!-- FEATURED & CARDS -->
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-card p-6 rounded-xl border-glow">
+                        <h3 class="text-xl font-bold mb-4 gradient-text">PRO COACHING</h3>
+                        <p class="text-gray-300 mb-4">Learn mechanics, rotation, and team play from RLCS‑level players. Go from Diamond to Champion and beyond.</p>
+                        <button onclick="showPage('coaching')" class="gradient-btn w-full py-2 rounded font-bold btn-hover">BOOK SESSION</button>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow">
+                        <h3 class="text-xl font-bold mb-4 gradient-text">SUBMIT YOUR CLIP</h3>
+                        <p class="text-gray-300 mb-4">Epic saves, ceiling shots, or team plays? Send it in — get featured and earn your spot in the hall of fame.</p>
+                        <button onclick="showPage('clips')" class="gradient-btn w-full py-2 rounded font-bold btn-hover">SEND CLIP</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- JOIN ROSTER -->
+            <section id="join" class="page-section max-w-md mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8 gradient-text glow-blue">JOIN THE ROSTER</h2>
+                <div class="bg-card p-8 rounded-xl border-glow">
+                    <input type="text" placeholder="Full Name / Gamertag" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+                    <input type="text" placeholder="Discord Tag" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+                    <input type="text" placeholder="Epic Games / RL ID" class="w-full p-3 mb-4 rounded bg-dark border border-neonBlue/30">
+                    <input type="text" placeholder="Current Rank / Division" class="w-full p-3 mb-6 rounded bg-dark border border-neonBlue/30">
+                    <button class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">CREATE ACCOUNT</button>
+                    <p class="text-center text-sm text-gray-400 mt-4">Already have account? <a href="#" onclick="toggleModal('loginModal')" class="text-neonCyan">Sign in</a></p>
+                </div>
+            </section>
+
+            <!-- ABOUT -->
+            <section id="about" class="page-section">
+                <h2 class="text-3xl font-bold text-center mb-6 gradient-text glow-cyan">ABOUT ZYNDER ESPORTS</h2>
+                <p class="text-center text-lg text-gray-300 max-w-2xl mx-auto mb-12">Our mission: <span class="text-neonCyan font-semibold">Build the most technical, highest‑level Rocket League program in the scene.</span> We refine talent, perfect mechanics, and compete at the top.</p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-16">
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <h3 class="text-xl font-bold mb-3 text-neonCyan">PRECISION MECHANICS</h3>
+                        <p class="text-gray-400">Aerials, dribbling, flicks, and speed — trained to perfection.</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <h3 class="text-xl font-bold mb-3 text-neonCyan">ADVANCED STRATEGY</h3>
+                        <p class="text-gray-400">Rotation, positioning, reads, and team synergy — play smarter, not just faster.</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border-glow text-center">
+                        <h3 class="text-xl font-bold mb-3 text-neonCyan">ELITE COMMUNITY</h3>
+                        <p class="text-gray-400">Scrims, tournaments, and feedback — grow alongside the best players.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-center mb-8 gradient-text glow-blue">OUR ROSTER</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="bg-card p-5 rounded-lg border-glow text-center">
+                        <div class="font-bold text-lg text-neonCyan">ZYNDER</div>
+                        <div class="text-sm text-gray-400">Founder / Grand Champion</div>
+                    </div>
+                    <div class="bg-card p-5 rounded-lg border-glow text-center">
+                        <div class="font-bold text-lg text-neonCyan">VOLT</div>
+                        <div class="text-sm text-gray-400">Captain / RLCS Qualified</div>
+                    </div>
+                    <div class="bg-card p-5 rounded-lg border-glow text-center">
+                        <div class="font-bold text-lg text-neonCyan">FLUX</div>
+                        <div class="text-sm text-gray-400">Mechanic / Champion 3</div>
+                    </div>
+                    <div class="bg-card p-5 rounded-lg border-glow text-center">
+                        <div class="font-bold text-lg text-neonCyan">AERO</div>
+                        <div class="text-sm text-gray-400">Flex / Grand Champion</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CLIPS -->
+            <section id="clips" class="page-section max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8 gradient-text glow-purple">CLIPS HUB</h2>
+                <div class="bg-card p-8 rounded-xl border-glow mb-12">
+                    <h3 class="text-xl font-bold mb-4 text-neonPurple">SUBMIT YOUR PLAY</h3>
+                    <input type="text" placeholder="Your Name / Gamertag" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <input type="text" placeholder="Discord Tag" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <input type="text" placeholder="Clip Title" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <input type="text" placeholder="Video Link / Upload" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <textarea placeholder="Description / Context" class="w-full p-3 mb-6 rounded bg-dark border border-neonPurple/30 h-24"></textarea>
+                    <button class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">SUBMIT CLIP</button>
+                </div>
+
+                <h3 class="text-xl font-bold mb-4 text-center gradient-text">LIVE CLIP WALL</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-card p-4 rounded border border-neonPurple/20">
+                        <div class="text-sm text-gray-400">Featured Play</div>
+                        <div class="font-bold">Ceiling Shot Double Touch</div>
+                    </div>
+                    <div class="bg-card p-4 rounded border border-neonPurple/20">
+                        <div class="text-sm text-gray-400">Top Play</div>
+                        <div class="font-bold">Epic Save + Assist</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EVENTS -->
+            <section id="events" class="page-section">
+                <h2 class="text-3xl font-bold text-center mb-8 gradient-text glow-blue">EVENTS CALENDAR</h2>
+                <div class="flex flex-wrap gap-3 justify-center mb-10">
+                    <button class="px-4 py-2 rounded bg-neonBlue/20 text-neonBlue border border-neonBlue/40">ALL</button>
+                    <button class="px-4 py-2 rounded bg-dark border border-gray-600 hover:border-neonBlue">RLCS</button>
+                    <button class="px-4 py-2 rounded bg-dark border border-gray-600 hover:border-neonBlue">TOURNAMENTS</button>
+                    <button class="px-4 py-2 rounded bg-dark border border-gray-600 hover:border-neonBlue">SCRIMS</button>
+                    <button class="px-4 py-2 rounded bg-dark border border-gray-600 hover:border-neonBlue">CUSTOMS</button>
+                    <button class="px-4 py-2 rounded bg-dark border border-gray-600 hover:border-neonBlue">COACHING</button>
+                </div>
+
+                <div class="bg-card p-6 rounded-xl border-glow mb-8">
+                    <h3 class="font-bold text-lg mb-3 gradient-text">UPCOMING SCHEDULE</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-dark rounded border border-neonBlue/20">RLCS Qualifiers — Sun 15 Jun</div>
+                        <div class="p-3 bg-dark rounded border border-neonBlue/20">Pro Scrim Block — Tue 17 Jun</div>
+                        <div class="p-3 bg-dark rounded border border-neonBlue/20">Elite Coaching — Thu 19 Jun</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COACHING -->
+            <section id="coaching" class="page-section max-w-md mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8 gradient-text glow-cyan">REQUEST COACHING</h2>
+                <div class="bg-card p-8 rounded-xl border-glow">
+                    <input type="text" placeholder="Your Name / Gamertag" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
+                    <input type="text" placeholder="Discord Tag" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
+                    <input type="text" placeholder="Current Rank / Division" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
+                    <input type="text" placeholder="Preferred Date / Time" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
+                    <textarea placeholder="What do you want to learn? (Mechanics / Rotation / Teamplay)" class="w-full p-3 mb-6 rounded bg-dark border border-neonCyan/30 h-24"></textarea>
+                    <button class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">SEND REQUEST</button>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="page-section max-w-lg mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8 gradient-text glow-purple">GET IN TOUCH</h2>
+                <div class="grid md:grid-cols-3 gap-4 mb-10 text-center">
+                    <a href="https://tiktok.com/@zyndresports" target="_blank" class="p-4 bg-card rounded-lg border-glow hover:bg-neonPurple/10 transition">
+                        <i class="fa fa-tiktok text-2xl text-neonPurple mb-2"></i>
+                        <div>@zyndresports</div>
+                    </a>
+                    <a href="https://x.com/zyndresports" target="_blank" class="p-4 bg-card rounded-lg border-glow hover:bg-neonPurple/10 transition">
+                        <i class="fa fa-twitter text-2xl text-neonPurple mb-2"></i>
+                        <div>@zyndresports</div>
+                    </a>
+                    <a id="contactDiscord" href="https://discord.gg/zyndr" target="_blank" class="p-4 bg-card rounded-lg border-glow hover:bg-neonPurple/10 transition">
+                        <i class="fa fa-discord text-2xl text-neonPurple mb-2"></i>
+                        <div>Join Server</div>
+                    </a>
+                </div>
+
+                <div class="bg-card p-8 rounded-xl border-glow">
+                    <input type="text" placeholder="Your Name" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <input type="text" placeholder="Subject" class="w-full p-3 mb-4 rounded bg-dark border border-neonPurple/30">
+                    <textarea placeholder="Your Message" class="w-full p-3 mb-6 rounded bg-dark border border-neonPurple/30 h-28"></textarea>
+                    <button class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">SEND MESSAGE</button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-card border-t border-neonCyan/20 py-10 px-4">
+        <div class="container mx-auto max-w-6xl grid md:grid-cols-3 gap-8">
+            <div>
+                <div class="text-xl font-bold gradient-text glow-cyan mb-3">ZYNDER ESPORTS</div>
+                <p class="text-gray-400">Dominate the field. Master the aerials.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-3">Navigate</h4>
+                <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                    <a href="#" onclick="showPage('home')" class="hover:text-neonCyan">Home</a>
+                    <a href="#" onclick="showPage('about')" class="hover:text-neonCyan">About</a>
+                    <a href="#" onclick="showPage('clips')" class="hover:text-neonCyan">Clips</a>
+                    <a href="#" onclick="showPage('events')" class="hover:text-neonCyan">Events</a>
+                    <a href="#" onclick="showPage('coaching')" class="hover:text-neonCyan">Coaching</a>
+                    <a href="#" onclick="showPage('contact')" class="hover:text-neonCyan">Contact</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-3">Community</h4>
+                <a id="footerDiscord" href="https://discord.gg/zyndr" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord mr-2"></i> Discord Server</a>
+            </div>
+        </div>
+        <div class="container mx-auto text-center text-gray-500 text-sm mt-8 pt-6 border-t border-dark">
+            © 2026 ZYNDER ESPORTS • ALL RIGHTS RESERVED
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // PAGE SWITCHING
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // MODAL TOGGLE
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => e.target === m && m.classList.add('hidden')));
+
+        // LOGIN SYSTEM
+        const loginBtn = document.getElementById('loginBtn');
+        const doLogin = document.getElementById('doLogin');
+        const adminPanel = document.getElementById('adminPanel');
+
+        doLogin.addEventListener('click', () => {
+            toggleModal('loginModal');
+            loginBtn.textContent = "DASHBOARD";
+            loginBtn.onclick = () => adminPanel.classList.toggle('hidden');
+        });
+
+        // AUTO‑UPDATE DISCORD LINK EVERYWHERE
+        const discordInput = document.getElementById('discordLinkInput');
+        const saveDiscord = document.getElementById('saveDiscord');
+        const navDiscord = document.getElementById('navDiscord');
+        const contactDiscord = document.getElementById('contactDiscord');
+        const footerDiscord = document.getElementById('footerDiscord');
+
+        saveDiscord.addEventListener('click', () => {
+            const newLink = discordInput.value.trim();
+            navDiscord.href = newLink;
+            contactDiscord.href = newLink;
+            footerDiscord.href = newLink;
+            alert('✅ Discord link updated EVERYWHERE instantly!');
+        });
+
+        // UPDATE LIVE STATS
+        const saveStats = document.getElementById('saveStats');
+        saveStats.addEventListener('click', () => {
+            document.getElementById('numPlayers').textContent = document.getElementById('statPlayers').value;
+            document.getElementById('numTournaments').textContent = document.getElementById('statTournaments').value;
+            document.getElementById('numCoaching').textContent = document.getElementById('statCoaching').value;
+            document.getElementById('numMembers').textContent = document.getElementById('statMembers').value;
+            alert('✅ Stats updated live!');
+        });
+    </script>
+</body>
+</html>
