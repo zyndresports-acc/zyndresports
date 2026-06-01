@@ -54,8 +54,8 @@
     <div id="loginModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
         <div class="bg-card p-8 rounded-lg w-full max-w-md border-glow">
             <h2 class="text-2xl font-bold mb-6 text-center gradient-text glow-cyan">STAFF LOGIN</h2>
-            <input type="text" id="loginEmail" placeholder="Email Address" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
-            <input type="password" id="loginPass" placeholder="Password" class="w-full p-3 mb-4 rounded bg-dark border border-neonCyan/30">
+            <input type="text" id="loginEmail" placeholder="Email Address" class="w-full p-3 rounded bg-dark border border-neonCyan/30 mb-4">
+            <input type="password" id="loginPass" placeholder="Password" class="w-full p-3 rounded bg-dark border border-neonCyan/30 mb-4">
             <button id="doLogin" class="gradient-btn w-full py-3 rounded-md font-bold btn-hover">LOGIN</button>
         </div>
     </div>
@@ -73,11 +73,11 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL — FULL ACCOUNT MANAGEMENT -->
+    <!-- ADMIN PANEL — EDIT FUNCTION REMOVED, ONLY VIEW NOW -->
     <div id="adminPanel" class="fixed top-0 right-0 h-full w-80 bg-card border-l border-neonCyan/40 z-40 p-6 hidden overflow-y-auto shadow-2xl shadow-neonCyan/10">
         <div id="panelHeader" class="text-xl font-bold mb-8 text-center gradient-text glow-cyan"></div>
 
-        <!-- MAIN ADMIN ONLY — ADD/EDIT/REMOVE STAFF -->
+        <!-- MAIN ADMIN ONLY -->
         <div id="adminOnly" class="hidden mb-6 p-3 bg-dark rounded border border-neonCyan/20 role-admin">
             <h3 class="font-bold text-neonCyan mb-3">👤 MANAGE STAFF ACCOUNTS</h3>
             <input type="text" id="newStaffEmail" placeholder="New Staff Email" class="w-full p-2 mb-2 rounded bg-card">
@@ -96,14 +96,8 @@
             <hr class="border-neonCyan/20 my-4">
 
             <h3 class="font-bold text-neonCyan mb-2">🔧 SITE SETTINGS</h3>
-            <input type="text" id="discordLinkInput" placeholder="Discord Invite URL" class="w-full p-2 mb-2 rounded bg-card" value="https://discord.gg/mFB7YAfhSX">
-            <button id="saveDiscord" class="w-full gradient-btn py-2 rounded text-sm font-bold btn-hover mb-3">💾 UPDATE DISCORD EVERYWHERE</button>
-
-            <input type="text" id="statPlayers" class="w-full p-2 mb-1 rounded bg-card" value="18">
-            <input type="text" id="statTournaments" class="w-full p-2 mb-1 rounded bg-card" value="12">
-            <input type="text" id="statCoaching" class="w-full p-2 mb-1 rounded bg-card" value="42">
-            <input type="text" id="statMembers" class="w-full p-2 mb-2 rounded bg-card" value="147">
-            <button id="saveStats" class="w-full gradient-btn py-2 rounded text-sm font-bold btn-hover">💾 UPDATE LIVE STATS</button>
+            <p class="text-xs text-gray-400 mb-2">Links are fixed — no changes needed</p>
+            <input type="text" placeholder="Discord Link (Fixed)" class="w-full p-2 mb-2 rounded bg-card/50 text-gray-500" value="https://discord.gg/mFB7YAfhSX" disabled>
         </div>
 
         <!-- STAFF AREA -->
@@ -141,7 +135,7 @@
                 <a href="#" onclick="showPage('events')" class="hover:text-neonCyan transition">EVENTS</a>
                 <a href="#" onclick="showPage('coaching')" class="hover:text-neonCyan transition">COACHING</a>
                 <a href="#" onclick="showPage('contact')" class="hover:text-neonCyan transition">CONTACT</a>
-                <a id="navDiscord" href="https://discord.gg/zyndr" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord text-lg"></i></a>
+                <a id="navDiscord" href="https://discord.gg/mFB7YAfhSX" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord text-lg"></i></a>
             </div>
             <button id="loginBtn" onclick="toggleModal('loginModal')" class="gradient-btn px-5 py-2 rounded-md font-bold btn-hover">LOGIN</button>
         </div>
@@ -316,10 +310,6 @@
                         <i class="fa fa-tiktok text-2xl text-neonPurple mb-2"></i>
                         <div>@zyndresports</div>
                     </a>
-                    <a href="https://x.com/zyndresports" target="_blank" class="p-4 bg-card rounded-lg border-glow hover:bg-neonPurple/10 transition">
-                        <i class="fa fa-twitter text-2xl text-neonPurple mb-2"></i>
-                        <div>@zyndresports</div>
-                    </a>
                     <a id="contactDiscord" href="https://discord.gg/mFB7YAfhSX" target="_blank" class="p-4 bg-card rounded-lg border-glow hover:bg-neonPurple/10 transition">
                         <i class="fa fa-discord text-2xl text-neonPurple mb-2"></i>
                         <div>Join Server</div>
@@ -357,7 +347,7 @@
             </div>
             <div>
                 <h4 class="font-semibold mb-3">Community</h4>
-                <a id="footerDiscord" href="https://discord.gg/zyndr" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord mr-2"></i> Discord Server</a>
+                <a id="footerDiscord" href="https://discord.gg/mFB7YAfhSX" target="_blank" class="text-neonCyan hover:glow-cyan"><i class="fa fa-discord mr-2"></i> Discord Server</a>
             </div>
         </div>
         <div class="container mx-auto text-center text-gray-500 text-sm mt-8 pt-6 border-t border-dark">
@@ -367,40 +357,35 @@
 
     <!-- SCRIPTS -->
     <script>
-        // PAGE SWITCHING — NOW 100% WORKING
+        // PAGE SWITCHING
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // MODAL TOGGLE — FIXED
+        // MODAL TOGGLE
         function toggleModal(id) {
             const el = document.getElementById(id);
             if(el) el.classList.toggle('hidden');
         }
-        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => e.target === m && m.classList.add('hidden')));
 
         // --------------------------
-        // 🧑‍💼 STAFF ACCOUNT SYSTEM
+        // STAFF ACCOUNT SYSTEM
         // --------------------------
-        // MAIN ADMIN (YOU) — CANNOT BE DELETED
         let staffAccounts = [
             { email: 'zyndresports@gmail.com', pass: 'Mader18!', role: 'admin' }
         ];
 
-        // Load saved accounts
         if(localStorage.getItem('staffAccounts')) {
             staffAccounts = JSON.parse(localStorage.getItem('staffAccounts'));
         }
 
-        // Save accounts
         function saveAccounts() {
             localStorage.setItem('staffAccounts', JSON.stringify(staffAccounts));
             updateStaffList();
         }
 
-        // Update list display
         function updateStaffList() {
             const list = document.getElementById('staffList');
             list.innerHTML = '';
@@ -415,15 +400,12 @@
             });
         }
 
-        // Add new staff
         document.getElementById('addStaffBtn').addEventListener('click', () => {
             const email = document.getElementById('newStaffEmail').value.trim();
             const pass = document.getElementById('newStaffPass').value.trim();
             const role = document.getElementById('newStaffRole').value;
-
             if(!email || !pass) return alert('❌ Fill all fields');
             if(staffAccounts.find(a => a.email === email)) return alert('❌ Email already exists');
-
             staffAccounts.push({email, pass, role});
             saveAccounts();
             document.getElementById('newStaffEmail').value = '';
@@ -431,20 +413,18 @@
             alert('✅ Staff account created!');
         });
 
-        // Remove staff
         function removeStaff(email) {
             staffAccounts = staffAccounts.filter(a => a.email !== email);
             saveAccounts();
         }
 
-        // Clear all except main admin
         document.getElementById('clearStaffBtn').addEventListener('click', () => {
             staffAccounts = [{ email: 'zyndresports@gmail.com', pass: 'Mader18!', role: 'admin' }];
             saveAccounts();
         });
 
         // --------------------------
-        // LOGIN SYSTEM — FULLY FIXED
+        // LOGIN SYSTEM
         // --------------------------
         const loginBtn = document.getElementById('loginBtn');
         const doLogin = document.getElementById('doLogin');
@@ -457,8 +437,6 @@
         doLogin.addEventListener('click', () => {
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-
-            // Find account
             const user = staffAccounts.find(a => a.email === email && a.pass === pass);
             if(!user) return alert('❌ Invalid login details');
 
@@ -466,7 +444,6 @@
             loginBtn.textContent = "DASHBOARD";
             loginBtn.onclick = () => adminPanel.classList.toggle('hidden');
 
-            // Show only what their role allows
             panelHeader.textContent = user.role.toUpperCase() + " PANEL";
             adminOnly.classList.add('hidden');
             staffOnly.classList.add('hidden');
@@ -479,31 +456,7 @@
             updateStaffList();
         });
 
-        // --------------------------
-        // SITE SETTINGS — WORKING
-        // --------------------------
-        const discordInput = document.getElementById('discordLinkInput');
-        const saveDiscord = document.getElementById('saveDiscord');
-        const navDiscord = document.getElementById('navDiscord');
-        const contactDiscord = document.getElementById('contactDiscord');
-        const footerDiscord = document.getElementById('footerDiscord');
-
-        saveDiscord.addEventListener('click', () => {
-            const newLink = discordInput.value.trim();
-            navDiscord.href = newLink;
-            contactDiscord.href = newLink;
-            footerDiscord.href = newLink;
-            alert('✅ Discord link updated EVERYWHERE instantly!');
-        });
-
-        const saveStats = document.getElementById('saveStats');
-        saveStats.addEventListener('click', () => {
-            document.getElementById('numPlayers').textContent = document.getElementById('statPlayers').value;
-            document.getElementById('numTournaments').textContent = document.getElementById('statTournaments').value;
-            document.getElementById('numCoaching').textContent = document.getElementById('statCoaching').value;
-            document.getElementById('numMembers').textContent = document.getElementById('statMembers').value;
-            alert('✅ Stats updated live!');
-        });
+        // ❌ REMOVED EDIT FUNCTION — LINKS ARE FIXED PERMANENTLY NOW
     </script>
 </body>
 </html>
